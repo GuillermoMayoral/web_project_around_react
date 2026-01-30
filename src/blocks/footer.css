@@ -1,0 +1,21 @@
+.footer__text {
+    margin: 50px 0 36px;
+    padding-left: 19px;
+    color: #545454;
+    font-size: 14px;
+}
+
+@media (min-width: 544px) {
+    .footer__text {
+        margin: 58px 0 45px;
+        padding-left: 0;
+        font-size: 16px;
+    }
+}
+
+@media (min-width: 880px) {
+    .footer__text {
+        margin: 67px 0 60px;
+        font-size: 18px;
+    }
+}
