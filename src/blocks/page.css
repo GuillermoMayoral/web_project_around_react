@@ -1,0 +1,34 @@
+.page {
+    background-color: black;
+    color: #FFFFFF;
+    font-family: 'inter', sans-serif;
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+}
+
+.page__size {
+    width: 90%;
+    max-width: 880px;
+    min-width: 320px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.page>.footer:last-child {
+    background-color: red;
+}
+
+@media (min-width: 544px) {
+    .page__size {
+        max-width: 600px;
+    }
+}
+
+@media (min-width: 880px) {
+    .page__size {
+        max-width: 880px;
+
+    }
+}

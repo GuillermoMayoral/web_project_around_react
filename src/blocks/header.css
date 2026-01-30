@@ -1,0 +1,35 @@
+.header__logo {
+    padding: 28px 0 0 27px;
+    max-width: 126px;
+    width: 100%;
+}
+
+.header__line {
+    margin: 32px 0 0 0;
+    border: none;
+    height: 1px;
+    background-color: rgba(84, 84, 84, 0.7);
+    width: 100%;
+}
+
+@media (min-width: 544px) {
+    .header__logo {
+        padding: 35px 0 0;
+        max-width: 152px;
+    }
+
+    .header__line {
+        margin: 37px 0 0;
+    }
+}
+
+@media (min-width: 880px) {
+    .header__logo {
+        padding: 45px 0 0;
+        max-width: 173px;
+    }
+
+    .header__line {
+        margin: 41px 0 0;
+    }
+}
