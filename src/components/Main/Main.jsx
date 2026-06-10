@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import imgButtonEdit from '../../images/button-edit.png';
 import imgButtonAdd from '../../images/profile-add.svg';
@@ -11,7 +11,10 @@ import EditAvatar from './Popup/EditAvatar/EditAvatar.jsx';
 import ImagePopup from './Popup/BigImagePopup/BigImagePopup.jsx';
 import Card from './Card/Card.jsx';
 
-const cards = [
+//importando api
+import api from '../../utils/api.js';
+
+/*const cards = [
     {
         isLiked: false,
         _id: '5d1f0611d321eb4bdcd707dd',
@@ -29,14 +32,26 @@ const cards = [
         createdAt: '2019-07-05T08:11:58.324Z',
     },
 ];
-
-console.log(cards);
+*/
 
 function Main() {
     const [popup, setPopup] = useState(null);
     const newCardPopup = { title: "Nuevo lugar", children: <NewCard /> };
     const editProfilePopup = { title: "Editar Perfil", children: <EditProfile /> };
     const editAvatarPopup = { title: "Editar Avatar", children: <EditAvatar /> };
+
+    const [cards, setCards] = useState([]);
+    console.log(cards);
+
+    useEffect(() => {
+        api.getInitialCards()
+            .then((cardData) => {
+                setCards(cardData)
+            })
+            .catch((err) => {
+                console.log(`Error al cargar las tarjetas con .then: ${err}`);
+            })
+    }, []);
 
 
     function handleOpenPopup(popup) {
