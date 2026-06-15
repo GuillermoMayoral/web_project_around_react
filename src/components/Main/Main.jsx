@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 
 import imgButtonEdit from '../../images/button-edit.png';
 import imgButtonAdd from '../../images/profile-add.svg';
@@ -14,32 +14,13 @@ import Card from './Card/Card.jsx';
 //importando api
 import api from '../../utils/api.js';
 
-/*const cards = [
-    {
-        isLiked: false,
-        _id: '5d1f0611d321eb4bdcd707dd',
-        name: 'Yosemite Valley',
-        link: 'https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg',
-        owner: '5d1f0611d321eb4bdcd707dd',
-        createdAt: '2019-07-05T08:10:57.741Z',
-    },
-    {
-        isLiked: false,
-        _id: '5d1f064ed321eb4bdcd707de',
-        name: 'Lake Louise',
-        link: 'https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lake-louise.jpg',
-        owner: '5d1f0611d321eb4bdcd707dd',
-        createdAt: '2019-07-05T08:11:58.324Z',
-    },
-];
-*/
+//context
+import { UserContext } from '../../contexts/CurrentUserContext.jsx';
 
-function Main() {
-    const [popup, setPopup] = useState(null);
-    const newCardPopup = { title: "Nuevo lugar", children: <NewCard /> };
-    const editProfilePopup = { title: "Editar Perfil", children: <EditProfile /> };
-    const editAvatarPopup = { title: "Editar Avatar", children: <EditAvatar /> };
 
+function Main(props) {
+
+    //cards
     const [cards, setCards] = useState([]);
     console.log(cards);
 
@@ -53,20 +34,40 @@ function Main() {
             })
     }, []);
 
+    //context
+    const { currentUser } = useContext(UserContext);
 
-    function handleOpenPopup(popup) {
-        setPopup(popup);
-    }
-
-    function handleClosePopup() {
-        setPopup(null);
-    }
-
+    //funciones de manejo
     function handleCardClick(clickedCardData) {
-        setPopup({
-            title: null, // Sin título para activar el modo imagen en Popup.jsx
-            children: <ImagePopup card={clickedCardData} /> // Pasamos LA CARTA ESPECÍFICA
+        props.onOpenPopup({
+            title: null,
+            children: <ImagePopup card={clickedCardData} />
         });
+    }
+
+    //control de likes
+    async function handleCardLike(card) {
+        const isLiked = card.isLiked;
+
+        // Debido a que yo maanejo en mi api dos metodos para dar o quitar like, verifico cual usar en base a si es true o false el like
+        const apiRequest = isLiked ? api.disLikeCard(card._id) : api.likeCard(card._id);
+
+        await apiRequest
+            .then((newCard) => {
+                setCards((state) =>
+                    state.map((currentCard) => currentCard._id === card._id ? newCard : currentCard)
+                );
+            })
+            .catch((error) => console.error(`Error al procesar el like: ${error}`));
+    }
+
+    //borrado de tarjetas
+    function handleCardDelete(card) {
+        api.deleteCard(card._id)
+            .then(() => {
+                setCards((state) => state.filter((currentCard) => currentCard._id !== card._id));
+            })
+            .catch((error) => console.error(`Error al eliminar tarjeta: ${error}`));
     }
 
     return (
@@ -74,33 +75,35 @@ function Main() {
             <section className="profile">
 
                 <div className="profile__data">
-                    <div className="profile__photo-container" onClick={() => handleOpenPopup(editAvatarPopup)}>
-                        <img src={avatar} alt="foto de perfil" className="profile__photo" ></img>
+                    <div className="profile__photo-container" onClick={() => props.onOpenPopup(props.editAvatarPopup)}>
+                        <img src={currentUser.avatar || avatar} alt="foto de perfil" className="profile__photo" ></img>
                     </div>
                     <div className="profile__text">
                         <div className="profile__header">
-                            <h2 className="profile__name">Memo Mayoral</h2>
-                            <button className="profile__edit-button" type="button" onClick={() => handleOpenPopup(editProfilePopup)}>
+                            <h2 className="profile__name">{currentUser.name || "Usuario"}</h2>
+                            <button className="profile__edit-button" type="button" onClick={() => props.onOpenPopup(props.editProfilePopup)}>
                                 <img className="profile__edit-image" src={imgButtonEdit} alt="editar nombre y descripcion"></img>
                             </button>
                         </div>
-                        <p className="profile__description">Estudiante</p>
+                        <p className="profile__description">{currentUser.about || "descripcion vacia"}</p>
                     </div>
                 </div>
-                <button className="profile__button" type="button" onClick={() => handleOpenPopup(newCardPopup)}>
+                <button className="profile__button" type="button" onClick={() => props.onOpenPopup(props.newCardPopup)}>
                     <img className="profile__button-image" src={imgButtonAdd} alt="signo de mas"></img>
                 </button>
             </section>
             <section className="post">
                 <ul className="post__cards">
                     {cards.map((card) => (
-                        <Card key={card._id} card={card} onCardClick={handleCardClick} />
+                        <Card key={card._id} card={card} onCardClick={handleCardClick} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
                     ))}
                 </ul>
             </section>
-            {popup && <Popup onClose={handleClosePopup} title={popup.title}>
-                {popup.children}
-            </Popup>}
+            {props.popup && (
+                <Popup onClose={props.onClosePopup} title={props.popup.title}>
+                    {props.popup.children}
+                </Popup>
+            )}
         </main>
     );
 }
