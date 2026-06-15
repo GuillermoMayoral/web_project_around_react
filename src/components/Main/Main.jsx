@@ -12,7 +12,7 @@ import ImagePopup from './Popup/BigImagePopup/BigImagePopup.jsx';
 import Card from './Card/Card.jsx';
 
 //context
-import { UserContext } from '../../contexts/CurrentUserContext.jsx';
+import { UserContext } from '../../contexts/CurrentUserContext';
 
 
 function Main(props) {

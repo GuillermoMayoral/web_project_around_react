@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { UserContext } from '../../../../contexts/CurrentUserContext.jsx';
+import { UserContext } from '../../../../contexts/CurrentUserContext';
 
 export default function NewCard() {
     const { handleAddPlaceSubmit } = useContext(UserContext);
