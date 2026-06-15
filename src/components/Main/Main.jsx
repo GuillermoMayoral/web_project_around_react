@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useContext } from 'react';
 
 import imgButtonEdit from '../../images/button-edit.png';
 import imgButtonAdd from '../../images/profile-add.svg';
@@ -11,28 +11,11 @@ import EditAvatar from './Popup/EditAvatar/EditAvatar.jsx';
 import ImagePopup from './Popup/BigImagePopup/BigImagePopup.jsx';
 import Card from './Card/Card.jsx';
 
-//importando api
-import api from '../../utils/api.js';
-
 //context
 import { UserContext } from '../../contexts/CurrentUserContext.jsx';
 
 
 function Main(props) {
-
-    //cards
-    const [cards, setCards] = useState([]);
-    console.log(cards);
-
-    useEffect(() => {
-        api.getInitialCards()
-            .then((cardData) => {
-                setCards(cardData)
-            })
-            .catch((err) => {
-                console.log(`Error al cargar las tarjetas con .then: ${err}`);
-            })
-    }, []);
 
     //context
     const { currentUser } = useContext(UserContext);
@@ -45,30 +28,6 @@ function Main(props) {
         });
     }
 
-    //control de likes
-    async function handleCardLike(card) {
-        const isLiked = card.isLiked;
-
-        // Debido a que yo maanejo en mi api dos metodos para dar o quitar like, verifico cual usar en base a si es true o false el like
-        const apiRequest = isLiked ? api.disLikeCard(card._id) : api.likeCard(card._id);
-
-        await apiRequest
-            .then((newCard) => {
-                setCards((state) =>
-                    state.map((currentCard) => currentCard._id === card._id ? newCard : currentCard)
-                );
-            })
-            .catch((error) => console.error(`Error al procesar el like: ${error}`));
-    }
-
-    //borrado de tarjetas
-    function handleCardDelete(card) {
-        api.deleteCard(card._id)
-            .then(() => {
-                setCards((state) => state.filter((currentCard) => currentCard._id !== card._id));
-            })
-            .catch((error) => console.error(`Error al eliminar tarjeta: ${error}`));
-    }
 
     return (
         <main className="content">
@@ -94,8 +53,8 @@ function Main(props) {
             </section>
             <section className="post">
                 <ul className="post__cards">
-                    {cards.map((card) => (
-                        <Card key={card._id} card={card} onCardClick={handleCardClick} onCardLike={handleCardLike} onCardDelete={handleCardDelete} />
+                    {props.cards.map((card) => (
+                        <Card key={card._id} card={card} onCardClick={handleCardClick} onCardLike={props.onCardLike} onCardDelete={props.onCardDelete} />
                     ))}
                 </ul>
             </section>
