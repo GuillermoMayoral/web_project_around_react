@@ -1,15 +1,15 @@
-import Header from "./components/Header/Header"
-import Main from "./components/Main/Main"
-import Footer from "./components/Footer/Footer"
+import Header from "./Header/Header.jsx"
+import Main from "./Main/Main.jsx"
+import Footer from "./Footer/Footer.jsx"
 import { useState, useEffect } from 'react';
 //popups
-import NewCard from './components/Main/Popup/NewCard/NewCard.jsx';
-import EditProfile from './components/Main/Popup/EditProfile/EditProfile.jsx';
-import EditAvatar from './components/Main/Popup/EditAvatar/EditAvatar.jsx';
+import NewCard from './Main/Popup/NewCard/NewCard.jsx';
+import EditProfile from './Main/Popup/EditProfile/EditProfile.jsx';
+import EditAvatar from './Main/Popup/EditAvatar/EditAvatar.jsx';
 //api
-import api from './utils/api';
+import api from '../utils/api.js';
 //contexto
-import { UserContext } from "./contexts/CurrentUserContext";
+import { UserContext } from "../contexts/CurrentUserContext.js";
 
 function App() {
   const [currentUser, setCurrentUser] = useState({});

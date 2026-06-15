@@ -8,7 +8,7 @@ import Popup from './Popup/Popup.jsx';
 import NewCard from './Popup/NewCard/NewCard.jsx';
 import EditProfile from './Popup/EditProfile/EditProfile.jsx';
 import EditAvatar from './Popup/EditAvatar/EditAvatar.jsx';
-import ImagePopup from './Popup/BigImagePopup/BigImagePopup.jsx';
+import ImagePopup from './Popup/ImagePopup/ImagePopup.jsx';
 import Card from './Card/Card.jsx';
 
 //context

@@ -1,5 +1,5 @@
 
-export default function BigImagePopup(props) {
+export default function ImagePopup(props) {
     const { name, link } = props.card;
 
     return (
