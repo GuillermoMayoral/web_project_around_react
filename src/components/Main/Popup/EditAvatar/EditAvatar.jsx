@@ -7,13 +7,25 @@ export default function EditAvatar() {
 
     //error para la validacion
     const [avatarError, setAvatarError] = useState('');
+    const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
+    const handleInputChange = () => {
+        const input = avatarRef.current;
+
+        if (input.checkValidity()) {
+            setAvatarError('');
+            setIsButtonDisabled(false);
+        } else {
+            setAvatarError(input.validationMessage);
+            setIsButtonDisabled(true);
+        }
+    };
 
     function handleSubmit(e) {
         e.preventDefault();
 
         const input = avatarRef.current;
         if (!input.checkValidity()) {
-            setAvatarError(input.validationMessage);
             return;
         }
         handleUpdateAvatar({
@@ -21,14 +33,15 @@ export default function EditAvatar() {
         });
 
         setAvatarError('');
+        setIsButtonDisabled(true);
     }
     return (
         <form className="popup__form" noValidate onSubmit={handleSubmit}>
             <input id="link-input-avatar" type="url" name="link"
                 className="popup__description-input popup__input popup__input-avatar"
-                placeholder="Enlace de la imagen" required ref={avatarRef} />
+                placeholder="Enlace de la imagen" required ref={avatarRef} onChange={handleInputChange} />
             <span className={`popup__error link-input-avatar-error ${avatarError ? 'popup__error_visible' : ''}`}>{avatarError}</span>
-            <button className="popup__button" type="submit">Guardar</button>
+            <button className="popup__button" type="submit" disabled={isButtonDisabled}>Guardar</button>
         </form>
     )
 }

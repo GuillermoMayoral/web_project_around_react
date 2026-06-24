@@ -42,6 +42,8 @@ export default function EditProfile() {
         handleUpdateUser({ name, about: description });
     };
 
+    const isButtonDisabled = nameError || descriptionError || !name || !description;
+
     return (
         <form className="popup__form" noValidate onSubmit={handleSubmit}>
             <input id="name-input" type="text" name="name" className="popup__name-input popup__input"
@@ -55,7 +57,7 @@ export default function EditProfile() {
 
             <span className={`popup__error about-input-error ${descriptionError ? 'popup__error_visible' : ''}`}>{descriptionError}</span>
 
-            <button className="popup__button" type="submit">Guardar</button>
+            <button className="popup__button" type="submit" disabled={isButtonDisabled}>Guardar</button>
         </form>
     );
 }

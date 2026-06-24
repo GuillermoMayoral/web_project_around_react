@@ -49,6 +49,8 @@ export default function NewCard() {
         setLinkError('');
     }
 
+    const isButtonDisabled = titleError || linkError || !title || !link;
+
     return (
         <form className="popup__form" noValidate onSubmit={handleSubmit}>
             <input
@@ -82,7 +84,7 @@ export default function NewCard() {
             <span className={`popup__error link-input-error ${linkError ? 'popup__error_visible' : ''}`}>
                 {linkError}
             </span>
-            <button className="popup__button" type="submit">Crear</button>
+            <button className="popup__button" type="submit" disabled={isButtonDisabled}>Crear</button>
         </form>
     );
 }
